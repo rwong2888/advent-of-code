@@ -25,19 +25,29 @@ done
 
 #calculate totals
 
+```
 for file in $(ls *.txt); do
     awk -v file="$file" '{ sum += $1 } END { print sum " " file}' $file
 done > output
+```
 
-# get largest calories
+#get largest calories
+
+```
 sort -rn output | head -1 | cut -d' ' -f1
+```
 
 ### B
 
-# get top 3 calories
+#get top 3 calories
 
+```
 sort -rn output | head -3 | cut -d' ' -f1 > input3
+```
 
-# total top 3
+#total top 3
+
+```
 paste -s -d+ input3 | bc
+```
 
