@@ -6,17 +6,16 @@ import (
 	"os"
 	"regexp"
 	"strconv"
-	"strings"
 )
 
-var line string
+var line, match string
 var integers []string
 var d int
 
 func main() {
 
 	total := 0
-	re := regexp.MustCompile("[0-9]")
+	re, _ := regexp.Compile(`^(\d|one|two|three|four|five|six|seven|eight|nine)`)
 
 	readFile, err := os.Open("input")
 
@@ -28,21 +27,36 @@ func main() {
 	fileScanner.Split(bufio.ScanLines)
 
 	for fileScanner.Scan() {
+		integers = make([]string, 0)
 		line = fileScanner.Text()
-		fmt.Println(line)
-		line = strings.ReplaceAll(line, "one", "1")
-		line = strings.ReplaceAll(line, "two", "2")
-		line = strings.ReplaceAll(line, "three", "3")
-		line = strings.ReplaceAll(line, "four", "4")
-		line = strings.ReplaceAll(line, "five", "5")
-		line = strings.ReplaceAll(line, "six", "6")
-		line = strings.ReplaceAll(line, "seven", "7")
-		line = strings.ReplaceAll(line, "eight", "8")
-		line = strings.ReplaceAll(line, "nine", "9")
-		integers = re.FindAllString(line, -1)
+		for i, _ := range line {
+			match = re.FindString(line[i:])
+			switch match {
+			case "one", "1":
+				match = "1"
+			case "two", "2":
+				match = "2"
+			case "three", "3":
+				match = "3"
+			case "four", "4":
+				match = "4"
+			case "five", "5":
+				match = "5"
+			case "six", "6":
+				match = "6"
+			case "seven", "7":
+				match = "7"
+			case "eight", "8":
+				match = "8"
+			case "nine", "9":
+				match = "9"
+			}
+			if match != "" {
+				integers = append(integers, match)
+			}
+		}
 		d, _ := strconv.Atoi((fmt.Sprintf("%s%s", integers[0], integers[len(integers)-1])))
 		total += d
-		fmt.Println(line, integers, d, total)
 	}
 
 	readFile.Close()
